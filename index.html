@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b12"><meta name="description" content="Daily Routine Tracker • Minecraft Survival Mode">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png">
+<title>Daily Routine • Survival Mode</title>
+<style>
+:root{--red:#ff4655;--red2:#a9162c;--gold:#ffc65a;--panel:rgba(12,13,21,.91);--line:#45333c;--muted:#b6b6c7;--green:#78d69a}
+*{box-sizing:border-box}body{margin:0;background:#070910 url('./minecraft-bg.jpg') center/cover fixed;color:#f8f7fb;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,#050710a8,#08080eeF 55%,#090910d9);z-index:-1}
+button,input{font:inherit}button{color:#fff;background:#1b1821;border:1px solid #59404a;border-radius:12px;padding:10px 13px}button:active{transform:scale(.98)}.primary{background:linear-gradient(135deg,#97182b,#ef3448);border-color:#ff6670;font-weight:800}
+header{max-width:760px;margin:auto;padding:calc(14px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:12px}header img{width:48px;height:48px;border-radius:13px;border:1px solid #74323c}h1{font-size:23px;margin:0;line-height:1.1}.sub{font-size:12px;color:var(--muted)}
+main{max-width:760px;margin:auto;padding:8px 14px calc(100px + env(safe-area-inset-bottom))}
+.page{display:none}.page.active{display:block}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 10px 30px #0008;backdrop-filter:blur(9px)}
+.hero{background:linear-gradient(135deg,#260e1cF2,#111625F2);border-color:#853644}.eyebrow{font-size:10px;letter-spacing:2px;color:#ff9ba2;font-weight:850}.heroRow{display:flex;justify-content:space-between;align-items:center}.score{font-size:36px;font-weight:900}.muted{color:var(--muted);font-size:13px}.bar{height:9px;background:#05060b;border-radius:99px;overflow:hidden;margin-top:9px}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#a9172b,#ff674b)}
+.heading{display:flex;justify-content:space-between;align-items:center;margin:20px 3px 8px}.heading h2{font-size:19px;margin:0}.heading small{color:var(--muted)}
+.quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.quick{padding:13px;background:#11131deF;border:1px solid #4d3943;border-radius:15px}.quick b{display:block;font-size:23px}.quick span{font-size:12px;color:var(--muted)}
+.task{display:grid;grid-template-columns:27px 1fr auto;align-items:center;gap:11px;background:#11131dea;border:1px solid #4a3a43;border-radius:14px;padding:12px;margin:8px 0}.task.done{opacity:.56}.task.done .taskname{text-decoration:line-through}.check{width:22px;height:22px;accent-color:#f34b58}.time{font-size:11px;color:#ff8c94;font-weight:850}.taskname{font-weight:750}.desc{font-size:12px;color:var(--muted)}.task button{font-size:11px;padding:7px 8px}
+.glasses{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.glass{font-size:21px;padding:12px 4px;background:#101622;border-color:#3d4658}.glass.full{background:#351b27;border-color:#fa5865}
+.fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:12px;color:var(--muted)}input[type=time],input[type=text]{width:100%;padding:10px;margin-top:5px;background:#090b12;color:white;border:1px solid #59424b;border-radius:10px}
+.statline{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #ffffff1a}.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#08080ef2;border-top:1px solid #70303b;padding:8px 4px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(12px);z-index:5}.tabs button{border:0;background:transparent;color:#c5c2cf;font-size:11px;padding:5px 8px;min-width:58px}.tabs button.active{color:#ff626d;text-shadow:0 0 12px #ff3344}.tabs strong{display:block;font-size:19px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:25px}.notice{font-size:12px;color:#d8c7c8;line-height:1.5}.danger{border-color:#803c45}
+</style></head>
+<body>
+<header><img src="./icon-192.png" alt="Warrior icon"><div><div class="eyebrow">SURVIVAL MODE • DAILY RESET</div><h1>Daily Routine</h1><div class="sub" id="date"></div></div></header>
+<main>
+<section class="page active" id="home">
+ <div class="panel hero"><div class="heroRow"><div><div class="eyebrow">TODAY'S QUEST PROGRESS</div><div class="score"><span id="done">0</span>/<span id="total">11</span></div><div class="muted" id="percent">0% completed</div></div><div style="font-size:48px">⚔️</div></div><div class="bar"><span id="bar"></span></div></div>
+ <div class="quickgrid">
+  <div class="quick" onclick="showPage('water')"><span>💧 WATER QUEST</span><b id="waterMini">0.0 L</b><span>of 4 litres · Tap to open</span></div>
+  <div class="quick" onclick="showPage('progress')"><span>🏆 DAILY STREAK</span><b id="todayPct">0%</b><span>Today's completion</span></div>
+ </div>
+ <div class="heading"><h2>📜 Today's checklist</h2><small>Tick as you finish</small></div>
+ <div id="homeTasks"></div>
+ <div class="panel"><div class="eyebrow">SURVIVAL TIP</div><b>One quest at a time.</b><div class="muted">You don't need a perfect day. Just keep moving forward.</div></div>
+</section>
+<section class="page" id="routine">
+ <div class="heading"><h2>⚔️ Routine quests</h2><button class="primary" onclick="addTask()">+ Add</button></div>
+ <div class="panel"><div class="fieldgrid"><label>Wake-up time<input id="wake" type="time" value="09:30"></label><label>Sleep time<input id="sleep" type="time" value="01:00"></label></div><div class="actions"><button class="primary" onclick="shiftRoutine()">Auto-shift times</button><button onclick="resetChecks()">Reset checks</button></div><p class="notice">Edit any quest's name, time or details. Auto-shift moves every quest by the difference from your first task.</p></div>
+ <div id="allTasks"></div>
+</section>
+<section class="page" id="water">
+ <div class="heading"><h2>💧 Water tracker</h2><small>Goal · 4 litres</small></div>
+ <div class="panel hero"><div class="eyebrow">STAY HYDRATED, STAY STRONG</div><div class="score"><span id="litres">0.0</span> L</div><div class="muted" id="glassLabel">0 of 8 glasses · 500 ml each</div><div class="bar"><span id="waterBar"></span></div><div class="glasses" id="glassButtons"></div><div class="actions"><button onclick="changeWater(-1)">− 500 ml</button><button class="primary" onclick="changeWater(1)">+ 500 ml</button></div></div>
+ <div class="panel"><b>Daily water quest</b><p class="notice">Target: 8 glasses × 500 ml. Spread your water intake throughout your waking day.</p></div>
+</section>
+<section class="page" id="progress">
+ <div class="heading"><h2>🏆 Progress & history</h2></div>
+ <div class="panel hero"><div class="eyebrow">TODAY'S COMPLETION</div><div class="score" id="progressBig">0%</div><div class="bar"><span id="progressBar"></span></div></div>
+ <div class="panel"><b>Previous days</b><div id="history"></div></div>
+</section>
+<section class="page" id="settings">
+ <div class="heading"><h2>⚙️ Settings</h2></div>
+ <div class="panel"><b>Survival settings</b><p class="notice">Your task checks and water count are saved on this device. The app resets today's checklist and water tracker when a new day starts.</p><div class="actions"><button onclick="exportData()">Export my progress</button><button class="danger" onclick="clearAll()">Clear all app data</button></div></div>
+ <div class="panel"><b>Reminder limits</b><p class="notice">This installable web app cannot guarantee exact-time alarms while fully closed or when Android restricts background activity. Use the phone Clock for critical alarms; native Android integration can be added in a future version.</p></div>
+</section>
+</main>
+<nav class="tabs">
+<button class="active" data-page="home" onclick="showPage('home')"><strong>⌂</strong>Home</button>
+<button data-page="routine" onclick="showPage('routine')"><strong>⚔</strong>Routine</button>
+<button data-page="water" onclick="showPage('water')"><strong>🧪</strong>Water</button>
+<button data-page="progress" onclick="showPage('progress')"><strong>▥</strong>Progress</button>
+<button data-page="settings" onclick="showPage('settings')"><strong>⚙</strong>Settings</button>
+</nav>
+<script>
+const KEY='survival-routine-v4';const today=()=>new Date().toLocaleDateString('en-CA');
+const seed=[['09:30','10:00','Wake up + Freshen up','Get ready for the day'],['10:00','12:00','Ghar ke kaam','Home responsibilities'],['12:00','14:00','Study Session 1','Focused study'],['14:00','15:00','Lunch','Lunch break'],['15:00','17:00','Study Session 2','Focused study'],['17:00','17:30','Protein oats','Evening protein oats'],['17:00','19:00','TV, fun + gym preparation','Pre-workout meal and get ready'],['19:00','20:30','Gym','Workout / training'],['20:30','21:00','Dinner + Protein + Creatine','Dinner, protein shake and creatine'],['21:00','23:00','Study Session 3','Focused study'],['23:00','01:00','Fun & Enjoy Bitchesss 👑','Free time and relax']];
+function fresh(){return {day:today(),tasks:seed.map((x,i)=>({id:i+1,start:x[0],end:x[1],name:x[2],desc:x[3],done:false})),water:0,history:{}}}
+function load(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&d.day===today())return d;if(d){d.history=d.history||{};d.history[d.day]=Math.round((d.tasks.filter(t=>t.done).length/Math.max(1,d.tasks.length))*100);return {...fresh(),history:d.history}}}catch(e){}return fresh()}
+let state=load();function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});render()}
+function stats(){let n=state.tasks.length,d=state.tasks.filter(t=>t.done).length,p=n?Math.round(d/n*100):0;return {n,d,p}}
+function taskNode(t){let e=document.createElement('div');e.className='task'+(t.done?' done':'');let c=document.createElement('input');c.type='checkbox';c.className='check';c.checked=t.done;c.onchange=()=>{t.done=c.checked;save();render()};let info=document.createElement('div');let time=document.createElement('div');time.className='time';time.textContent=t.start+' – '+t.end;let name=document.createElement('div');name.className='taskname';name.textContent=t.name;let desc=document.createElement('div');desc.className='desc';desc.textContent=t.desc;info.append(time,name,desc);let edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editTask(t);e.append(c,info,edit);return e}
+function render(){let s=stats();document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});['done'].forEach(id=>document.getElementById(id).textContent=s.d);document.getElementById('total').textContent=s.n;document.getElementById('percent').textContent=s.p+'% completed';document.getElementById('bar').style.width=s.p+'%';document.getElementById('todayPct').textContent=s.p+'%';document.getElementById('progressBig').textContent=s.p+'%';document.getElementById('progressBar').style.width=s.p+'%';document.getElementById('waterMini').textContent=(state.water*.5).toFixed(1)+' L';document.getElementById('litres').textContent=(state.water*.5).toFixed(1);document.getElementById('glassLabel').textContent=state.water+' of 8 glasses · 500 ml each';document.getElementById('waterBar').style.width=(state.water/8*100)+'%';
+for(let id of ['homeTasks','allTasks']){let box=document.getElementById(id);box.innerHTML='';state.tasks.forEach(t=>box.appendChild(taskNode(t)))}
+let gb=document.getElementById('glassButtons');gb.innerHTML='';for(let i=1;i<=8;i++){let b=document.createElement('button');b.className='glass'+(i<=state.water?' full':'');b.textContent=i<=state.water?'🪣':'○';b.onclick=()=>{state.water=i;save();render()};gb.appendChild(b)}
+let hist=document.getElementById('history');let rows=Object.entries(state.history||{}).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,14);hist.innerHTML=rows.length?rows.map(([d,p])=>`<div class="statline"><span>${d}</span><b>${p}%</b></div>`).join(''):'<p class="muted">Your completed days will appear here.</p>'}
+function editTask(t){let name=prompt('Quest name',t.name);if(name===null)return;let start=prompt('Start time (HH:MM)',t.start);if(start===null)return;let end=prompt('End time (HH:MM)',t.end);if(end===null)return;let desc=prompt('Details',t.desc);if(desc===null)return;Object.assign(t,{name,start,end,desc});save();render()}
+function addTask(){let name=prompt('New quest name');if(!name)return;let start=prompt('Start time (HH:MM)','10:00');if(!start)return;let end=prompt('End time (HH:MM)','11:00');if(!end)return;state.tasks.push({id:Date.now(),name,start,end,desc:'',done:false});save();render()}
+function shiftRoutine(){let old=state.tasks[0]?.start||'09:30',neo=document.getElementById('wake').value||'09:30';let min=x=>{let [h,m]=x.split(':').map(Number);return h*60+m};let diff=min(neo)-min(old);state.tasks.forEach(t=>{for(let k of ['start','end']){let v=(min(t[k])+diff+1440)%1440;t[k]=String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')}});save();render();alert('Routine shifted. You can edit each quest separately.')}
+function changeWater(n){state.water=Math.max(0,Math.min(8,state.water+n));save();render()}
+function resetChecks(){if(confirm("Reset today's task checks?")){state.tasks.forEach(t=>t.done=false);save();render()}}
+function clearAll(){if(confirm('Delete all saved routine progress on this device?')){localStorage.removeItem(KEY);state=fresh();save();render()}}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='routine-progress.json';a.click();URL.revokeObjectURL(a.href)}
+save();render();if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script></body></html>
